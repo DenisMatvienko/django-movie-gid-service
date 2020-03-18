@@ -1,8 +1,10 @@
 from django.db import models
 from django.db import models
 from datetime import date
+from django.urls import reverse
 
 
+#   Категории
 class Category(models.Model):
     name = models.CharField('Категория', max_length=150)
     description = models.TextField('Описание')
@@ -16,6 +18,7 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
 
 
+#   Актеры
 class Actor(models.Model):
     name = models.CharField('Имя', max_length=100)
     age = models.PositiveSmallIntegerField('Возраст', default=0)
@@ -30,6 +33,7 @@ class Actor(models.Model):
         verbose_name_plural = 'Актеры'
 
 
+#   Режиссеры
 class FilmDirector(models.Model):
     name = models.CharField('Имя', max_length=100)
     age = models.PositiveSmallIntegerField('Возраст', default=0)
@@ -44,6 +48,7 @@ class FilmDirector(models.Model):
         verbose_name_plural = 'Режиссеры'
 
 
+#   Жанры
 class Genre(models.Model):
     name = models.CharField('Имя', max_length=100)
     description = models.TextField('Описание')
@@ -57,6 +62,7 @@ class Genre(models.Model):
         verbose_name_plural = 'Жанры'
 
 
+#   Фильмы
 class Movie(models.Model):
     title = models.CharField('Название', max_length=100)
     tagline = models.CharField('Слоган', max_length=100, default='')
@@ -78,11 +84,15 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('movie_detail', kwargs={'slug': self.url})
+
     class Meta:
         verbose_name = 'Фильм'
         verbose_name_plural = 'Фильмы'
 
 
+#   Кадры фильмов
 class MovieShots(models.Model):
     title = models.CharField('Заголовок', max_length=100)
     description = models.TextField('Описание')
@@ -97,6 +107,7 @@ class MovieShots(models.Model):
         verbose_name_plural = 'Кадры из фильма'
 
 
+# Рейтинг
 class RatingStars(models.Model):
     value = models.SmallIntegerField('Значение', default=0)
 
