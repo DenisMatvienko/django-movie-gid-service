@@ -477,9 +477,21 @@ mark,
   content: "\2014 \00A0";
 }
 
+.img-review{
+  max-width: 80px;
+  height: 80px;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
+}
+
+.img-movie-shots {
+  max-width: 250px;
+  min-height: 166px;
+  height: auto;
+  padding-bottom: 3px;
 }
 
 .img-thumbnail {
