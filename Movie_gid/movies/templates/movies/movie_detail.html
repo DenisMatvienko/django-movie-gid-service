@@ -19,27 +19,27 @@
             <h3 class="editContent" style="outline: none; cursor: inherit;">{{ movie.title }}</h3>
             <h5 class="editContent"></h5>
             <ul>
-                <li style="list-style: none"><span><b>Год:</b>{{ movie.year }}</span></li>
-                <li style="list-style: none"><span><b>Страна:</b>{{ movie.country }}</span>
+                <li style="list-style: none"><span><b>Год:  </b>{{ movie.year }}</span></li>
+                <li style="list-style: none"><span><b>Страна:   </b>{{ movie.country }}</span>
                 </li>
-                <li style="list-style: none"><span><b>Слоган:</b>{{ movie.tagline }}</span>
+                <li style="list-style: none"><span><b>Слоган:   </b>{{ movie.tagline }}</span>
                 </li>
                 <li style="list-style: none">
-                    <span><b>Режиссер:</b>
+                    <span><b>Режиссер:  </b>
                         {% for director in movie.directors.all %}
                             {{ director.name }}
                         {% endfor %}
                     </span>
                 </li>
                 <li style="list-style: none">
-                    <span><b>Актеры:</b>
+                    <span><b>Актеры:    </b>
                         {% for actor in movie.actors.all %}
                             {{ actor.name }}
                         {% endfor %}
                     </span>
                 </li>
                 <li style="list-style: none">
-                    <span><b>Жанр:</b>
+                    <span><b>Жанр:  </b>
                         {% for genre in movie.genres.all %}
                             {{ genre.name }}
                         {% endfor %}
@@ -48,10 +48,10 @@
                 <li style="list-style: none"><span><b>Премьера в мире:</b>{{ movie.world_premiere }}</span>
                 </li>
                 <li style="list-style: none">
-                    <span><b>Бюджет:</b>${{ movie.budget }}</span></li>
+                    <span><b>Бюджет:    </b>${{ movie.budget }}</span></li>
                 <li style="list-style: none">
-                    <span><b>Сборы в США:</b>${{ movie.fees_in_usa }}</span></li>
-                <li style="list-style: none"><span><b>Сборы в мире:</b>${{ movie.fees_in_world }}</span>
+                    <span><b>Сборы в США:   </b>${{ movie.fees_in_usa }}</span></li>
+                <li style="list-style: none"><span><b>Сборы в мире: </b>${{ movie.fees_in_world }}</span>
                 </li>
                 <li style="list-style: none">
                     <a href="#"><b>Рейтинг:</b>
@@ -173,7 +173,7 @@
             </div>
             <!--  //contact form grid ends here -->
         </div>
-    {% for review in movie.reviews_set.all %}
+    {% for review in movie.get_review %}
         <div class="media py-5 col-lg-12">
             <img src="{% static 'images/default.png' %}" class="mr-3 img-review" alt="image">
             <div class="media-body mt-4">
@@ -184,23 +184,17 @@
                     {{ review.text }}
                 </p>
                 <a href="#formReview" onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
-                <!-- <div class="media mt-5 editContent"
-                     style="outline: none; cursor: inherit;">
+                {% for rew in review.reviews_set.all %}
+                <div class="media mt-5 editContent">
                     <a class="pr-3" href="#">
-                        <img src="bundles/images/te1.jpg" class="img-fluid "
-                             alt="image" style="outline: none; cursor: inherit;">
+                        <img src="{% static 'images/default.png' %}" class="mr-3 img-review">
                     </a>
                     <div class="media-body">
-                        <h5 class="mt-0 editContent"
-                            style="outline: none; cursor: inherit;">Leia Organa</h5>
-                        <p class="mt-2 editContent"
-                           style="outline: none; cursor: inherit;"> Cras sit amet
-                            nibh libero, in gravida nulla. Nulla vel metus
-                            scelerisque ante sollicitudin. Cras purus odio,
-                            vestibulum in vulputate at, tempus viverra turpis. Fusce
-                            condimentum nunc ac nisi vulputate fringilla..</p>
+                        <h5 class="mt-0 editContent">{{ rew.name }}</h5>
+                        <p class="mt-2 editContent">{{ rew.text }}</p>
                     </div>
-                </div> -->
+                </div>
+                {% endfor %}
             </div>
         </div>
     {% endfor %}
