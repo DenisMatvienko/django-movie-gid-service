@@ -110,7 +110,7 @@ class MovieShots(models.Model):
         verbose_name_plural = 'Кадры из фильма'
 
 
-# Рейтинг
+#   Рейтинг
 class RatingStars(models.Model):
     value = models.SmallIntegerField('Значение', default=0)
 
@@ -135,6 +135,7 @@ class Rating(models.Model):
         verbose_name_plural = 'Рейтинги'
 
 
+#   Отзывы
 class Reviews(models.Model):
     email = models.EmailField()
     name = models.CharField('Имя', max_length=100)
