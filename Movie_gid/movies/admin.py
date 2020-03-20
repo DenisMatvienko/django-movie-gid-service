@@ -1,7 +1,20 @@
+from django import forms
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import Category, Actor, FilmDirector, Genre, Movie, MovieShots, RatingStars, Rating, Reviews
+
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+
+
+#   ckeditor widget
+class MovieAdminForm(forms.ModelForm):
+    description = forms.CharField(label='Описание', widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Movie
+        fields = '__all__'
+
 
 #   Заголовок админки и title
 admin.site.site_title = 'Админка MovieGid'
@@ -52,10 +65,12 @@ class MovieAdmin(admin.ModelAdmin):
     #   Позволяет выбрать поле для редактирования прямо в таблице, без необходимости открывать карточку. в нашем случае
     #   это draft (черновик)
     list_editable = ('draft',)
-    # Разбиваем ячейки с полями в более удобный формат отображения (пример: 2 поля в кортеже означают 2
-    # поля стоящих рядом в карточке). Словарь где ключ и значение это одна строка в шаблоне админки
-    readonly_fields = ('get_image',)
+    #   ckeditor form
+    form = MovieAdminForm
     #   В поле постера добавили отображение изображения постера, функцией get_image
+    readonly_fields = ('get_image',)
+    #   Разбиваем ячейки с полями в более удобный формат отображения (пример: 2 поля в кортеже означают 2
+    #   поля стоящих рядом в карточке). Словарь где ключ и значение это одна строка в шаблоне админки
     fieldsets = (
         (None, {
             'fields': (('title', 'tagline'),)
