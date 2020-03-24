@@ -12,7 +12,7 @@ class MoviesView(ListView):
     queryset = Movie.objects.filter(draft=False)
 
 
-#   Карточка фильма, полное его описание.
+#   Карточка фильма, полное его описание
 class MovieDetailView(DetailView):
     model = Movie
     slug_field = 'url'
