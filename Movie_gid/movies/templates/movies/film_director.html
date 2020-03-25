@@ -1,0 +1,39 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+{% block title %}{{ filmdirector.name }}{% endblock title %}
+{% block container %}
+    <div class="container py-md-3">
+{% endblock container %}
+
+{% block sidebar %}
+    <div class="side-bar col-lg-3">
+{% endblock sidebar %}    
+
+{% block movie %}
+<div class="left-ads-display col-lg-8">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ filmdirector.image.url }}" class="img-fluid" alt="{{ filmdirector.name }}" style="max-height: 400px">
+        </div>
+        <div class="desc1-right col-md-6 pl-lg-4">
+            <h1>{{ filmdirector.name }}</h1><hr>
+            <ul>
+                <li><span><b>Возраст:  </b>{{ filmdirector.age }} лет ;</span></li>
+                <li>
+                    <span><b>Режиссер:    </b>
+                        {% for movie in filmdirector.film_director.all %}
+                            {{ movie.title }} ;
+                        {% endfor %}                
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row sub-para-w3layouts mt-5">
+
+        <h3 class="shop-sing editContent">
+            О {{ filmdirector.name }}</h3>
+        <p class="editContent">{{ filmdirector.description | safe }}</p>
+    </div>
+</div>
+{% endblock movie %}
