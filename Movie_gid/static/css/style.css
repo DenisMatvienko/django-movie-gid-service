@@ -157,7 +157,7 @@ nav ul li {
 
 
 .menu li ul li a {
-    color: #555;
+    color: #FF8C00;
     padding: 10px 10px;
     font-size: 0.8em;
 }
@@ -170,11 +170,13 @@ nav ul li {
 /* Background color change on Hover */
 
 nav .menu li a:hover {
-    color: #ff4c4c !important;
+    color: #FF8C00 !important;
+    font-size: 15px;
 }
 
 .menu li.active a {
-    color: #ff4c4c !important;
+    color: #FF8C00 !important;
+    font-size: 15px;
 }
 
 /* Hide Dropdowns by Default
@@ -628,7 +630,7 @@ ul.tic-info li {
 span.money {
     font-size: 1em;
     font-weight: 800;
-    color: #ff4c4c;
+    color: #FF8C00;
     letter-spacing: 2px;
 }
 
@@ -1010,7 +1012,7 @@ form.w3layouts-newsletter {
 }
 
 .w3layouts-newsletter button.btn1 {
-    color: #ff4c4c;
+    color: #FF8C00;
     font-size: 17px;
     letter-spacing: 1px;
     padding: 14px 0;

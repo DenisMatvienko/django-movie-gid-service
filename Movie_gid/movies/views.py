@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
@@ -6,14 +7,23 @@ from .models import *
 from .forms import ReviewForm
 
 
+#   1 функция для получения всех Жанров и 1 функция для получения всех годов, с фильмами которые не черновики
+class GenreYear:
+    def get_genres(self):
+        return Genre.objects.all()
+
+    def get_years(self):
+        return Movie.objects.filter(draft=False).values('year')
+
+
 #   Списиок фильмов на главной странице, с шаблоном тоже самое, что и в detail
-class MoviesView(ListView):
+class MoviesView(GenreYear, ListView):
     model = Movie
     queryset = Movie.objects.filter(draft=False)
 
 
 #   Карточка фильма, полное его описание
-class MovieDetailView(DetailView):
+class MovieDetailView(GenreYear, DetailView):
     model = Movie
     slug_field = 'url'
     #   Шаблон не указываем потому что автоматически подставляется Detail к Movie,
@@ -39,7 +49,7 @@ class AddReview(View):
 
 
 #   Информация об актере
-class ActorView(DetailView):
+class ActorView(GenreYear, DetailView):
     model = Actor
     model_2 = FilmDirector
     template_name = 'movies/actor.html'
@@ -47,8 +57,30 @@ class ActorView(DetailView):
 
 
 #   Информация о режиссере
-class FilmDirectorView(DetailView):
+class FilmDirectorView(GenreYear, DetailView):
     model = FilmDirector
     template_name = 'movies/film_director.html'
     slug_field = 'name'
+
+
+#   Фильтр фильмов запятая. "," между year__in и genres__in это логическое "И", т.е. условие фильтра, что совпадают
+#   обязательно и year и genres. Для "ИЛИ", мы оборачиваем в Q и ставим | - логическое или.
+#   "Q(year__in) | Q(genres__in)" - это ИЛИ. year__in, genres__in - это И. Сейчас стоит И, т.е. находится только то, что
+#   удовлетворяет одновременно и year и genre
+# class FilterMoviesView(ListView):
+#     def get_queryset(self):
+#         queryset = Movie.objects.filter(
+#             year__in=self.request.GET.getlist('year'),
+#             genres__in=self.request.GET.getlist('genre'))
+#         return queryset
+
+
+#     Фильтр выводящий и год и жанр одновременно
+class FilterMoviesView(ListView):
+    def get_queryset(self):
+        queryset = Movie.objects.filter(
+            Q(year__in=self.request.GET.getlist('year')) |
+            Q(genres__in=self.request.GET.getlist('genre'))
+        )
+        return queryset
 

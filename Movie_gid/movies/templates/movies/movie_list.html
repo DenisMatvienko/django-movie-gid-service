@@ -6,9 +6,9 @@
                 <div class="row">
                     {% for movie in movie_list %}
                         <div class="col-md-4 product-men">
-                            <div class="product-shoe-info editContent text-center mt-lg-4" >
+                            <div class="product-shoe-info editContent text-center mt-lg-4">
                                 <div class="men-thumb-item">
-                                    <img src="{{ movie.poster.url }}" class="img-fluid" alt="" >
+                                    <a href="{{ movie.get_absolute_url }}" class="editContent" ><img src="{{ movie.poster.url }}" class="img-fluid" alt="" ></a>
                                 </div>
                                 <div class="item-info-product">
                                     <h4 class="">
@@ -17,7 +17,8 @@
 
                                     <div class="product_price">
                                         <div class="grid-price">
-                                            <span class="money editContent" >{{ movie.tagline }}</span>
+                                            <span class="money editContent" >{{ movie.tagline }}</span> <hr>
+                                            <span>Год: {{ movie.year }}</span><hr>
                                         </div>
                                     </div>
                                     <ul class="stars">
