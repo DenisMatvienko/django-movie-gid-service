@@ -2,9 +2,10 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
+from django.http import HttpResponse
 
 from .models import *
-from .forms import ReviewForm
+from .forms import *
 
 
 #   1 функция для получения всех Жанров и 1 функция для получения всех годов, с фильмами которые не черновики
@@ -20,6 +21,7 @@ class GenreYear:
 class MoviesView(GenreYear, ListView):
     model = Movie
     queryset = Movie.objects.filter(draft=False)
+    paginate_by = 20
 
 
 #   Карточка фильма, полное его описание
@@ -30,6 +32,11 @@ class MovieDetailView(GenreYear, DetailView):
     #   тем самым можно не указывать шаблон исходя из того, что в темплейтс шаблон назван movie_detail, к movie
     #   подставляется detail и шаблон находится. Если шаблон называется по маске: model(название модели)_
     #   detail(исп. класса), то можно путь к шаблону не указывать
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['star_form'] = RatingForm()
+        return context
 
 
 #   Отзывы
@@ -83,4 +90,28 @@ class FilterMoviesView(ListView):
             Q(genres__in=self.request.GET.getlist('genre'))
         )
         return queryset
+
+
+#   Добавление рейтинга фильму
+class AddStarRating(View):
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def post(self, request):
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                ip=self.get_client_ip(request),
+                movie_id=int(request.POST.get("movie")),
+                defaults={'star_id': int(request.POST.get("star"))}
+            )
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
+
 

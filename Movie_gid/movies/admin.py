@@ -139,7 +139,7 @@ class ActorAdmin(admin.ModelAdmin):
 #   Добавили имя и ip для отображения в таблицу админки, когда открывает Рейтинг
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ('movie', 'ip')
+    list_display = ('movie', 'star', 'ip')
 
 
 #   Добавили имя и ip для отображения в таблицу админки, когда открывает Кадры фильма
