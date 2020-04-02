@@ -612,6 +612,32 @@ ul.tic-info li {
 }
 
 /*-- //features --*/
+
+/*-- /Выводим слоган в блок не больше одной строки, с градиентом --*/
+
+.tagline_block {
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px;
+    position: relative;
+   }
+   .tagline_block::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0;
+    width: 40px;
+    height: 100%;
+    
+    background: -moz-linear-gradient(left, rgba(255,255,255, 0.2), #ffffff 100%);
+    background: -webkit-linear-gradient(left, rgba(255,255,255, 0.2), #ffffff 100%);
+    background: -o-linear-gradient(left, rgba(255,255,255, 0.2), #ffffff 100%);
+    background: -ms-linear-gradient(left, rgba(255,255,255, 0.2), #ffffff 100%);
+    background: linear-gradient(to right, rgba(255,255,255, 0.2), #ffffff 100%);
+   }
+
+/*-- //Выводим слоган в блок не больше одной строки, с градиентом --*/
+
+
 /*-- /New-Arrivals --*/
 
 .product-shoe-info {
@@ -804,8 +830,22 @@ ul.list-unstyled.w3layouts-icons.clients li span:hover {
 }
 
 /*-- //testimonials --*/
+
+#block-card {
+    background-color: #F7F7F7;
+}
+
+#card-of-movies{
+    background-color: #ffffff;
+    border-radius: 1%;
+}
+
 .men-thumb-item {
     position: relative;
+}
+
+.men-thumb-item img {
+  height: 480px !important;
 }
 
 .item-info-product h4 {
@@ -1071,10 +1111,9 @@ h3.sear-head {
 }
 
 @media only screen and (max-width: 767px) {
-    .pagination__item {
-        margin: 0 2px;
-        width: 33px;
-        height: 33px
+    .pagination__link {
+        color: #fff;
+        background: #ff8c00;
     }
 }
 
@@ -1087,27 +1126,27 @@ h3.sear-head {
 }
 
 @media only screen and (max-width: 1023px) {
-    .pagination__item:nth-child(3),
-    .pagination__item:nth-child(9) {
-        display: none
+    .pagination__link {
+        color: #fff;
+        background: #ff8c00;
     }
 }
 
 @media only screen and (min-width: 1025px) {
-    .pagination__item.active:hover
     .pagination__link {
         color: #fff;
-        background: #ff8c00
+        background: #ff8c00;
     }
 }
 
 .pagination__item.active .pagination__link {
     color: #fff;
-    background: #ffb963
+    background: #ffb963;
 }
 
 .pagination__item--dots .pagination__link {
-    color: #ff8c00
+    color: #ffb963;
+    background: white;
 }
 
 /*--/footer--*/

@@ -21,7 +21,7 @@ class GenreYear:
 class MoviesView(GenreYear, ListView):
     model = Movie
     queryset = Movie.objects.filter(draft=False)
-    paginate_by = 20
+    paginate_by = 12
 
 
 #   Карточка фильма, полное его описание
@@ -75,21 +75,28 @@ class FilmDirectorView(GenreYear, DetailView):
 #   "Q(year__in) | Q(genres__in)" - это ИЛИ. year__in, genres__in - это И. Сейчас стоит И, т.е. находится только то, что
 #   удовлетворяет одновременно и year и genre
 # class FilterMoviesView(ListView):
-#     def get_queryset(self):
-#         queryset = Movie.objects.filter(
-#             year__in=self.request.GET.getlist('year'),
-#             genres__in=self.request.GET.getlist('genre'))
-#         return queryset
+    # def get_queryset(self):
+    #     queryset = Movie.objects.filter(
+    #         year__in=self.request.GET.getlist('year'),
+    #         genres__in=self.request.GET.getlist('genre'))
+    #     return queryset
 
-
-#     Фильтр выводящий и год и жанр одновременно
+#   Фильтр выводящий и год и жанр одновременно
 class FilterMoviesView(ListView):
+    paginate_by = 12
+
     def get_queryset(self):
         queryset = Movie.objects.filter(
             Q(year__in=self.request.GET.getlist('year')) |
             Q(genres__in=self.request.GET.getlist('genre'))
-        )
+        ).distinct()
         return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['year'] = ''.join([f"year={x}&" for x in self.request.GET.getlist('year')])
+        context['genre'] = ''.join([f"genre={x}&" for x in self.request.GET.getlist('genre')])
+        return context
 
 
 #   Добавление рейтинга фильму
