@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.http import HttpResponse
 
+
 from .models import *
 from .forms import *
 
@@ -28,6 +29,7 @@ class MoviesView(GenreYear, ListView):
 class MovieDetailView(GenreYear, DetailView):
     model = Movie
     slug_field = 'url'
+
     #   Шаблон не указываем потому что автоматически подставляется Detail к Movie,
     #   тем самым можно не указывать шаблон исходя из того, что в темплейтс шаблон назван movie_detail, к movie
     #   подставляется detail и шаблон находится. Если шаблон называется по маске: model(название модели)_
@@ -36,6 +38,7 @@ class MovieDetailView(GenreYear, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['star_form'] = RatingForm()
+        context['form'] = ReviewForm()
         return context
 
 
@@ -75,11 +78,11 @@ class FilmDirectorView(GenreYear, DetailView):
 #   "Q(year__in) | Q(genres__in)" - это ИЛИ. year__in, genres__in - это И. Сейчас стоит И, т.е. находится только то, что
 #   удовлетворяет одновременно и year и genre
 # class FilterMoviesView(ListView):
-    # def get_queryset(self):
-    #     queryset = Movie.objects.filter(
-    #         year__in=self.request.GET.getlist('year'),
-    #         genres__in=self.request.GET.getlist('genre'))
-    #     return queryset
+# def get_queryset(self):
+#     queryset = Movie.objects.filter(
+#         year__in=self.request.GET.getlist('year'),
+#         genres__in=self.request.GET.getlist('genre'))
+#     return queryset
 
 #   Фильтр выводящий и год и жанр одновременно
 class FilterMoviesView(ListView):
@@ -122,3 +125,16 @@ class AddStarRating(View):
             return HttpResponse(status=400)
 
 
+#   Поиск фильмов. SQLITE ищет без регистра только кодировку ASCII, в utf-8 метод tagline__icontains
+#   становится полностью регистрозависимым, так что по своим свойства в SQLITE он будет находить правильно только
+#   в кодировке ASCII, тоже самое и с методом __iexact и остальными
+class Search(ListView):
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Movie.objects.filter(title__icontains=self.request.GET.get('q'))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['q'] = f'q={self.request.GET.get("q")}&'
+        return context
