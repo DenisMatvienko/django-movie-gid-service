@@ -137,42 +137,46 @@
     <hr>
     <div class="row">
         <div class="single-form-left col-lg-12">
-            <!-- contact form grid -->
-            <div class="contact-single">
-                <h3 class="editContent" style="outline: none; cursor: inherit;">
-                    <span class="sub-tittle editContent" style="outline: none; cursor: inherit;">Количество отзывов: {{ movie.reviews_set.count }}</span>Оставить отзыв</h3>
-                <form action="{% url 'add_review' movie.id %}" method="post" class="mt-4" id="formReview">
-                    {% csrf_token %}
-                    <input type="hidden" name="parent" id="contactparent" value="">
-                    <div class="form-group editContent"
-                         style="outline: none; cursor: inherit;">
-                        <label for="contactcomment" class="editContent">
-                            Ваш комментарий*
-                        </label>
-                        {{ form.text }}
-                    </div>
-                    <div class="d-sm-flex">
-                        <div class="col-sm-6 form-group p-0 editContent"
-                             >
-                            <label for="contactusername" class="editContent">
-                                Имя*
+            {% if user.is_authenticated %}
+                <!-- contact form grid -->
+                <div class="contact-single">
+                    <h3 class="editContent" style="outline: none; cursor: inherit;">
+                        <span class="sub-tittle editContent" style="outline: none; cursor: inherit;">Количество отзывов: {{ movie.reviews_set.count }}</span>Оставить отзыв</h3>
+                    <form action="{% url 'add_review' movie.id %}" method="post" class="mt-4" id="formReview">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent" id="contactparent" value="">
+                        <div class="form-group editContent"
+                             style="outline: none; cursor: inherit;">
+                            <label for="contactcomment" class="editContent">
+                                Ваш комментарий*
                             </label>
-                            {{ form.name }}
+                            {{ form.text }}
                         </div>
-                        <div class="col-sm-6 form-group ml-sm-3 editContent"
-                             >
-                            <label for="contactemail" class="editContent">
-                                Email*
-                            </label>
-                            {{ form.email }}
+                        <div class="d-sm-flex">
+                            <div class="col-sm-6 form-group p-0 editContent"
+                                 >
+                                <label for="contactusername" class="editContent">
+                                    Имя*
+                                </label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-sm-6 form-group ml-sm-3 editContent"
+                                 >
+                                <label for="contactemail" class="editContent">
+                                    Email*
+                                </label>
+                                {{ form.email }}
+                            </div>
+                            {{ form.captcha }}
                         </div>
-                        {{ form.captcha }}
-                    </div>
-                    <button type="submit" class="mt-3 btn btn-success btn-block py-3">
-                        Отправить
-                    </button>
-                </form>
-            </div>
+                        <button type="submit" class="mt-3 btn btn-success btn-block py-3">
+                            Отправить
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <span><a href="{% url 'account_login' %}">Войдите</a> в аккаунт или <a href="{% url 'account_signup' %}">зарегистрируйтесь</a>, чтобы оставлять коментарии</span>
+            {% endif %}
             <!--  //contact form grid ends here -->
         </div>
     {% for review in movie.get_review %}

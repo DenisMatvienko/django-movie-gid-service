@@ -1,0 +1,9 @@
+<h3 class="footer-title text-uppercase editContent mb-lg-4 mb-3" >Рассылка</h3>  
+ <p class="editContent" >Подписывайтесь на нашу email рассылку, чтобы быть в курсе последних добавленных фильмов, а так же новостей</p>
+
+ <form action="{% url 'contact' %}" method="post" class="w3layouts-newsletter">
+ 	{% csrf_token %}
+ 	{{ contact_form }}
+  <button class="btn1 btn" ><span class="fa fa-paper-plane-o" aria-hidden="true" ></span></button>
+
+ </form>
