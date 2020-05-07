@@ -9,20 +9,40 @@ from .models import *
 from .forms import *
 
 
-#   1 функция для получения всех Жанров и 1 функция для получения всех годов, с фильмами которые не черновики
+#   1-ая функция для получения всех Жанров и 2-ая функция для получения всех годов, с фильмами которые не черновики
+#   и 3-я функция для получения списка карточек по категориям
+#   (.objects.all())
 class GenreYear:
     def get_genres(self):
-        return Genre.objects.all()
+        return Genre.objects.get_queryset().order_by('id')
 
     def get_years(self):
         return Movie.objects.filter(draft=False).values('year')
+
+    def get_category(self):
+        return Category.objects.all()
+
+
+#   Списиок по категориям
+class MoviesCategoryView(GenreYear, ListView):
+    paginate_by = 9
+
+    def get_queryset(self):
+        queryset = Movie.objects.filter(category__in=self.request.GET.getlist('category')).distinct()
+        return queryset
+
+    # Функция для того чтобы при пагинации в урлах не было ошибки и находились 2 и следующие страницы пагинации
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['category'] = ''.join([f"category={x}&" for x in self.request.GET.getlist('category')])
+        return context
 
 
 #   Списиок фильмов на главной странице, с шаблоном тоже самое, что и в detail
 class MoviesView(GenreYear, ListView):
     model = Movie
     queryset = Movie.objects.filter(draft=False)
-    paginate_by = 12
+    paginate_by = 9
 
 
 #   Карточка фильма, полное его описание
@@ -84,9 +104,10 @@ class FilmDirectorView(GenreYear, DetailView):
 #         genres__in=self.request.GET.getlist('genre'))
 #     return queryset
 
+
 #   Фильтр выводящий и год и жанр одновременно
-class FilterMoviesView(ListView):
-    paginate_by = 12
+class FilterMoviesView(GenreYear, ListView):
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = Movie.objects.filter(
@@ -95,12 +116,13 @@ class FilterMoviesView(ListView):
         ).distinct()
         return queryset
 
+    # Функция для того чтобы при пагинации в урлах не было ошибки и находились 2 и следующие страницы пагинации
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['year'] = ''.join([f"year={x}&" for x in self.request.GET.getlist('year')])
         context['genre'] = ''.join([f"genre={x}&" for x in self.request.GET.getlist('genre')])
         return context
-
+        
 
 #   Добавление рейтинга фильму
 class AddStarRating(View):

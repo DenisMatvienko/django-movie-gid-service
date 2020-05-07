@@ -379,7 +379,6 @@ li > a:only-child:after {
     }
 
 }
-
 /* header */
 
 /*--/banner --*/
@@ -916,6 +915,13 @@ li.breadcrumb-item a {
 
 .img-deals img {
     border: 1px solid #ddd;
+}
+
+.scroll-bar {
+    overflow: auto;
+    width: 200px;
+    height: 150px;
+    padding: 5px;
 }
 
 ul.w3layouts-box-list li {

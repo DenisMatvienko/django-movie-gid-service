@@ -4,27 +4,40 @@
     <!-- nav -->
     <nav class="py-4">
         <div id="logo">
-            <h1> <a href="/" class="editContent" style="outline: none; outline-offset: -2px; cursor: inherit; color: rgb(255, 255, 255); font-size: 40px; background-color: rgba(0, 0, 0, 0); font-family: &quot;Source Sans Pro&quot;, sans-serif;">MovieGid</a></h1>
+            <h1> <a href="{% url 'main' %}" class="editContent" style=" outline-offset: -2px; font-size: 40px; font-family: &quot;Source Sans Pro&quot;, sans-serif;">MovieGid</a></h1>
         </div>
 
         <label for="drop" class="toggle">Menu</label>
         <input type="checkbox" id="drop">
         <ul class="menu mt-2">
-            <li class="active"><a href="/">Главная</a></li>
+            <li class="active"><a href="{% url 'main' %}">Главная</a></li>
             <li>
                 <!-- First Tier Drop Down -->
                 <label for="drop-2" class="toggle">Категории <span class="fa fa-angle-down" aria-hidden="true" ></span> </label>
-                <a href="#">Категории<span class="fa fa-angle-down" aria-hidden="true"></span></a>
+                <a href="#">Категории<span name="Category" class="fa fa-angle-down" aria-hidden="true"></span></a>
                 <input type="checkbox" id="drop-2">
                 <ul>
-                    {% get_categories as categories %}
-                    {% for category in categories %}
-                        <li><a href="moviesingle.html">{{ category.name }}</a></li>
+                    {% for category in view.get_category %}
+                        <li class="editContent">
+                            <a href="/category/?category={{category.id}}" name="category">
+                            <span class="span editContent">{{ category.name }}</span></a>
+                        </li>
                     {% endfor %}
+
+                    <!--Либо используем как фильтр (вариант 2) -->
+                    <!-- <form action="{% url 'category' %}" method="get" name="filter">
+                        {% for category in view.get_category %}
+                            <li class="editContent">
+                                <input type="checkbox" name="category" value="{{ category.id }}">
+
+                                <a><span class="span editContent">{{ category.name }}</span></a>
+                            </li>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-dark mb-5 mt-3"><span style="color: #FF8C00;">Найти</span></button>
+                    </form>  -->
                 </ul>
             </li>
             <li>
-                
                 {% if user.is_authenticated %}
                     <span style="color: #FF8C00; font-weight: 400;">{{ user.username }}</span>
                     <a href="{% url 'account_logout' %}"
@@ -50,7 +63,7 @@
 <!-- //header -->
 <!--/banner-->
 <div class="banner-info">
-<p class="editContent" >Краткий обзор фильмов, без коментариев</p>
+<p class="editContent" style="color: #FF8C00;">Краткий обзор фильмов, без коментариев</p>
 <h3 class="mb-4 editContent">Короткая версия фильма</h3>
 <div class="ban-buttons">
 

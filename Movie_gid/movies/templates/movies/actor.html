@@ -20,10 +20,10 @@
             <ul>
                 <li><span><b>Возраст:  </b>{{ actor.age }} лет ;</span></li>
                 <li>
-                    <span><b>Фильмография на сайте:    </b>
+                    <span><b>Фильмография на сайте:</b>
                         {% for movie in actor.film_actor.all %}
                             {{ movie.title }} ;
-                        {% endfor %}                
+                        {% endfor %}
                     </span>
                 </li>
             </ul>

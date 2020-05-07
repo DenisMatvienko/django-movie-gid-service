@@ -1,0 +1,35 @@
+{% extends 'movies/base.html' %}
+{% block header %} bg1 {% endblock header %}
+{% block movie %}
+<!-- product right -->
+<div class="left-ads-display col-lg-9">
+    <div class="row">
+        {% for movie in category %}
+            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" id="block-card">
+                <div class="text-center mt-lg-4 mb-3" id="card-of-movies">
+                    <div class="men-thumb-item">
+                        <a href="{{ movie.get_absolute_url }}" class="editContent" ><img src="{{ movie.poster.url }}" class="img-fluid" alt="" ></a>
+                    </div>
+                    <div class="item-info-product">
+                        <h4>
+                            <a href="{{ movie.get_absolute_url }}" class="editContent" >{{ movie.title }}</a>
+                        </h4>
+
+                        <div class="product_price">
+                            <div class="grid-price">
+                                    <p class="tagline_block" >{{ movie.tagline }}</p> 
+                                <hr>
+                                <p>Год: {{ movie.year }}</p><hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+        <div class="grid-img-right mt-4 text-right bg bg1" >
+            {% include 'include/pagination.html' %}
+        </div>
+</div>    
+<!-- //contact -->
+{% endblock movie %}

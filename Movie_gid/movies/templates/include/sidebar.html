@@ -13,33 +13,39 @@
 <form action="{% url 'filter' %}" method="get" name="filter">
     <div class="left-side my-4">
         <h3 class="sear-head editContent" >Жанры</h3>
-        <ul class="w3layouts-box-list">
-            {% for genre in view.get_genres %}
-                <li class="editContent" >
-                    <input type="checkbox" class="checked" name="genre" value="{{ genre.id }}">
-                    <span class="span editContent" >{{ genre.name }}</span>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="scroll-bar">
+            <ul class="w3layouts-box-list">
+                {% for genre in view.get_genres %}
+                    <li class="editContent" >
+                        <input type="checkbox" class="checked" name="genre" value="{{ genre.id }}">
+                        <span class="span editContent" >{{ genre.name }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 <!-- // preference -->
 <!-- discounts -->
     <div class="left-side">
         <h3 class="sear-head editContent" >Год</h3>
-        <ul class="w3layouts-box-list">
-            {% for movie in view.get_years %}
-                <li class="editContent" >
-                    <input type="checkbox" class="checked" name="year" value="{{ movie.year }}">
-                    <span class="span editContent" >{{ movie.year }}</span>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="scroll-bar">
+            <ul class="w3layouts-box-list">
+                {% for movie in view.get_years %}
+                    <li class="editContent" >
+                        <input type="checkbox" class="checked" name="year" value="{{ movie.year }}">
+                        <span class="span editContent" >{{ movie.year }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     <button type="submit" class="btn btn-dark mb-5 mt-3"><span style="color: #FF8C00;">Найти</span></button><hr>
 </form>
 <!-- //discounts -->
 <!-- reviews -->
-<div class="customer-rev left-side my-4">
+
+<!-- Рейтинг добавить в DRF -->
+<!-- <div class="customer-rev left-side my-4">
     <h3 class="sear-head editContent" >Рейтинг</h3>
     <ul class="w3layouts-box-list">
         <li>
@@ -93,5 +99,5 @@
             </a>
         </li>
     </ul>
-</div>
+</div> -->
 {% get_last_movies count=3 %}
