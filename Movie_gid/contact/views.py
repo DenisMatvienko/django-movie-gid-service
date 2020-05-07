@@ -4,6 +4,7 @@ from .models import Contact
 from .forms import ContactForm
 
 
+#   Подписка по Email
 class ContactView(CreateView):
     model = Contact
     form_class = ContactForm

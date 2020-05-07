@@ -97,14 +97,6 @@ class FilmDirectorView(GenreYear, DetailView):
 #   обязательно и year и genres. Для "ИЛИ", мы оборачиваем в Q и ставим | - логическое или.
 #   "Q(year__in) | Q(genres__in)" - это ИЛИ. year__in, genres__in - это И. Сейчас стоит И, т.е. находится только то, что
 #   удовлетворяет одновременно и year и genre
-# class FilterMoviesView(ListView):
-# def get_queryset(self):
-#     queryset = Movie.objects.filter(
-#         year__in=self.request.GET.getlist('year'),
-#         genres__in=self.request.GET.getlist('genre'))
-#     return queryset
-
-
 #   Фильтр выводящий и год и жанр одновременно
 class FilterMoviesView(GenreYear, ListView):
     paginate_by = 9
@@ -149,7 +141,7 @@ class AddStarRating(View):
 
 #   Поиск фильмов. SQLITE ищет без регистра только кодировку ASCII, в utf-8 метод tagline__icontains
 #   становится полностью регистрозависимым, так что по своим свойства в SQLITE он будет находить правильно только
-#   в кодировке ASCII, тоже самое и с методом __iexact и остальными
+#   в кодировке ASCII, тоже самое и с методом __iexact и остальными. Это причина сломаного поиска на сайте.
 class Search(ListView):
     paginate_by = 3
 

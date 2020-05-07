@@ -157,7 +157,7 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'skin': 'moono',
+        # 'skin': 'moono',
         # 'skin': 'office2013',
         'toolbar_Basic': [
             ['Source', '-', 'Bold', 'Italic']
@@ -189,7 +189,9 @@ CKEDITOR_CONFIGS = {
                 # put the name of your editor.ui.addButton here
                 'Preview',
                 'Maximize',
-                'Youtube'
+                'Youtube',
+                'Video',
+                'Html5video'
 
             ]},
         ],
@@ -217,7 +219,10 @@ CKEDITOR_CONFIGS = {
             'dialog',
             'dialogui',
             'elementspath',
-            'youtube'
+            'youtube',
+            'video',
+            'html5video'
+
         ]),
     }
 }
