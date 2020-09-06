@@ -1,0 +1,12 @@
+include LICENSE.txt
+include README.md
+include venv
+include requirements.txt
+recursive-include Movie_gid/contact *.py
+recursive-include Movie_gid/media
+recursive-include Movie_gid/Movie_gid *.py
+recursive-include Movie_gid/movies *.py
+recursive-include Movie_gid/movies/static *
+recursive-include Movie_gid/movies/templates *
+recursive-include Movie_gid/movies/locale *
+recursive-include Movie_gid/static *

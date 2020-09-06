@@ -12,7 +12,7 @@
 <!--preference -->
 <form action="{% url 'filter' %}" method="get" name="filter">
     <div class="left-side my-4">
-        <h3 class="sear-head editContent" >Жанры</h3>
+        <h3 class="sear-head editContent">Жанры</h3>
         <div class="scroll-bar">
             <ul class="w3layouts-box-list">
                 {% for genre in view.get_genres %}
@@ -42,62 +42,4 @@
     <button type="submit" class="btn btn-dark mb-5 mt-3"><span style="color: #FF8C00;">Найти</span></button><hr>
 </form>
 <!-- //discounts -->
-<!-- reviews -->
-
-<!-- Рейтинг добавить в DRF -->
-<!-- <div class="customer-rev left-side my-4">
-    <h3 class="sear-head editContent" >Рейтинг</h3>
-    <ul class="w3layouts-box-list">
-        <li>
-            <a href="#">
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="editContent" >5.0</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star-o" aria-hidden="true" ></span>
-                <span class="editContent" >4.0</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star-half-o" aria-hidden="true" ></span>
-                <span class="fa fa-star-o" aria-hidden="true" ></span>
-                <span class="editContent" >3.5</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star" aria-hidden="true"></span>
-                <span class="fa fa-star-o" aria-hidden="true" ></span>
-                <span class="fa fa-star-o" aria-hidden="true" ></span>
-                <span class="editContent" >3.0</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <span class="fa fa-star" aria-hidden="true"></span>
-                <span class="fa fa-star" aria-hidden="true" ></span>
-                <span class="fa fa-star-half-o" aria-hidden="true" ></span>
-                <span class="fa fa-star-o" aria-hidden="true" ></span>
-                <span class="fa fa-star-o" aria-hidden="true" ></span>
-                <span class="editContent" >2.5</span>
-            </a>
-        </li>
-    </ul>
-</div> -->
 {% get_last_movies count=3 %}

@@ -4,8 +4,8 @@ from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 from .models import Reviews, Rating, RatingStars
 
 
-#   Форма отзывов
 class ReviewForm(forms.ModelForm):
+    """ Review form with fields for add review """
     captcha = ReCaptchaField()
 
     class Meta:
@@ -20,6 +20,7 @@ class ReviewForm(forms.ModelForm):
 
 #   Форма добавления рейтинга
 class RatingForm(forms.ModelForm):
+    """ Rating form with stars field for making rating """
     star = forms.ModelChoiceField(queryset=RatingStars.objects.all(), widget=forms.RadioSelect(), empty_label=None)
 
     class Meta:

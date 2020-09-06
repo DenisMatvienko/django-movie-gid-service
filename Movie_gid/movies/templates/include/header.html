@@ -19,22 +19,10 @@
                 <ul>
                     {% for category in view.get_category %}
                         <li class="editContent">
-                            <a href="/category/?category={{category.id}}" name="category">
+                            <a href="/category/?category={{ category.id }}" name="category">
                             <span class="span editContent">{{ category.name }}</span></a>
                         </li>
                     {% endfor %}
-
-                    <!--Либо используем как фильтр (вариант 2) -->
-                    <!-- <form action="{% url 'category' %}" method="get" name="filter">
-                        {% for category in view.get_category %}
-                            <li class="editContent">
-                                <input type="checkbox" name="category" value="{{ category.id }}">
-
-                                <a><span class="span editContent">{{ category.name }}</span></a>
-                            </li>
-                        {% endfor %}
-                        <button type="submit" class="btn btn-dark mb-5 mt-3"><span style="color: #FF8C00;">Найти</span></button>
-                    </form>  -->
                 </ul>
             </li>
             <li>

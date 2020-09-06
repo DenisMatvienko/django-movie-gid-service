@@ -4,56 +4,53 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.http import HttpResponse
 
-
 from .models import *
 from .forms import *
 
 
-#   1-ая функция для получения всех Жанров и 2-ая функция для получения всех годов, с фильмами которые не черновики
-#   и 3-я функция для получения списка карточек по категориям
-#   (.objects.all())
 class GenreYear:
+    """
+        Object of filters for Genre, Years & Categories
+    """
     def get_genres(self):
+        """ Get list of genres into sidebar """
         return Genre.objects.get_queryset().order_by('id')
 
     def get_years(self):
+        """ Get list of years into sidebar """
         return Movie.objects.filter(draft=False).values('year')
 
     def get_category(self):
+        """ Get list of categories """
         return Category.objects.all()
 
 
-#   Списиок по категориям
 class MoviesCategoryView(GenreYear, ListView):
+    """ List by categories """
     paginate_by = 9
 
     def get_queryset(self):
         queryset = Movie.objects.filter(category__in=self.request.GET.getlist('category')).distinct()
         return queryset
 
-    # Функция для того чтобы при пагинации в урлах не было ошибки и находились 2 и следующие страницы пагинации
     def get_context_data(self, *args, **kwargs):
+        """ For with pagination urls didn't have the errors and we are can find second pages & others pages  """
         context = super().get_context_data(*args, **kwargs)
         context['category'] = ''.join([f"category={x}&" for x in self.request.GET.getlist('category')])
         return context
 
 
-#   Списиок фильмов на главной странице, с шаблоном тоже самое, что и в detail
 class MoviesView(GenreYear, ListView):
+    """ List of movies on main page """
     model = Movie
     queryset = Movie.objects.filter(draft=False)
     paginate_by = 9
 
 
-#   Карточка фильма, полное его описание
 class MovieDetailView(GenreYear, DetailView):
+    """ Movie-page, with all description """
     model = Movie
     slug_field = 'url'
-
-    #   Шаблон не указываем потому что автоматически подставляется Detail к Movie,
-    #   тем самым можно не указывать шаблон исходя из того, что в темплейтс шаблон назван movie_detail, к movie
-    #   подставляется detail и шаблон находится. Если шаблон называется по маске: model(название модели)_
-    #   detail(исп. класса), то можно путь к шаблону не указывать
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -62,15 +59,15 @@ class MovieDetailView(GenreYear, DetailView):
         return context
 
 
-#   Отзывы
 class AddReview(View):
+    """ Add reviews into movie-page """
     def post(self, request, pk):
         form = ReviewForm(request.POST)
         movie = Movie.objects.get(id=pk)
         if form.is_valid():
             form = form.save(commit=False)
-            #   в if вычисляем родителя отзыва, для отображения в админке, чтобы знать к какому вопросу принадлежит
-            #   ответ
+            #   get parent of review, for displaying in admin panel. That for we are knew, for which
+            #   question belongs answer
             if request.POST.get('parent', None):
                 form.parent_id = int(request.POST.get('parent'))
             form.movie = movie
@@ -78,27 +75,23 @@ class AddReview(View):
         return redirect(movie.get_absolute_url())
 
 
-#   Информация об актере
 class ActorView(GenreYear, DetailView):
+    """ Actors information """
     model = Actor
     model_2 = FilmDirector
     template_name = 'movies/actor.html'
     slug_field = 'name'
 
 
-#   Информация о режиссере
 class FilmDirectorView(GenreYear, DetailView):
+    """ Film directors information """
     model = FilmDirector
     template_name = 'movies/film_director.html'
     slug_field = 'name'
 
 
-#   Фильтр фильмов запятая. "," между year__in и genres__in это логическое "И", т.е. условие фильтра, что совпадают
-#   обязательно и year и genres. Для "ИЛИ", мы оборачиваем в Q и ставим | - логическое или.
-#   "Q(year__in) | Q(genres__in)" - это ИЛИ. year__in, genres__in - это И. Сейчас стоит И, т.е. находится только то, что
-#   удовлетворяет одновременно и year и genre
-#   Фильтр выводящий и год и жанр одновременно
 class FilterMoviesView(GenreYear, ListView):
+    """ Filter which displays year and genre objects in same time """
     paginate_by = 9
 
     def get_queryset(self):
@@ -108,7 +101,7 @@ class FilterMoviesView(GenreYear, ListView):
         ).distinct()
         return queryset
 
-    # Функция для того чтобы при пагинации в урлах не было ошибки и находились 2 и следующие страницы пагинации
+    """ For with pagination urls didn't have the errors and we are can find second pages & others pages  """
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['year'] = ''.join([f"year={x}&" for x in self.request.GET.getlist('year')])
@@ -116,8 +109,8 @@ class FilterMoviesView(GenreYear, ListView):
         return context
         
 
-#   Добавление рейтинга фильму
 class AddStarRating(View):
+    """ Add count of stars by each movie-objects """
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -139,10 +132,14 @@ class AddStarRating(View):
             return HttpResponse(status=400)
 
 
-#   Поиск фильмов. SQLITE ищет без регистра только кодировку ASCII, в utf-8 метод tagline__icontains
-#   становится полностью регистрозависимым, так что по своим свойства в SQLITE он будет находить правильно только
-#   в кодировке ASCII, тоже самое и с методом __iexact и остальными. Это причина сломаного поиска на сайте.
 class Search(ListView):
+    """
+        Movies search
+        Note:
+            SQLITE search without case sensitive just in ASCII encoding,
+            Method in UTF-8 tagline__icontains - full case sensitive
+        That reason limited search
+    """
     paginate_by = 3
 
     def get_queryset(self):

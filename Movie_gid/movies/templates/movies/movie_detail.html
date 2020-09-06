@@ -36,9 +36,13 @@
                 <li style="list-style: none">
                     <span><b>Актеры:    </b>
                         {% for actor in movie.actors.all %}
-                            <a href="{{ actor.get_absolute_url }}">
-                                {{ actor.name }} ;
-                            </a>
+                            {% if actor.name %}
+                                <a href="{{ actor.get_absolute_url }}">
+                                    {{ actor.name }},
+                                </a>
+                            {% else %}
+                                <p>;</p>
+                            {% endif %}
                         {% endfor %}
                     </span>
                 </li>

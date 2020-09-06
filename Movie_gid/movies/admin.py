@@ -7,8 +7,8 @@ from .models import Category, Actor, FilmDirector, Genre, Movie, MovieShots, Rat
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
-#   ckeditor widget
 class MovieAdminForm(forms.ModelForm):
+    """ Ckeditor widget """
     description = forms.CharField(label='Описание', widget=CKEditorUploadingWidget())
 
     class Meta:
@@ -16,28 +16,30 @@ class MovieAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
-#   Заголовок админки и title
+#   Main header name & title
 admin.site.site_title = 'Админка MovieGid'
 admin.site.site_header = 'Добро пожаловать в административную панель MovieGid'
 
 
-#   "Категории" в админке выставляем внутри порядок отображения таблицы + ссылки у столбцов
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    """
+        Category of movies
+        In admin check the ordering table-viewing + links
+    """
     list_display = ('id', 'name', 'url')
     list_display_links = ('id', 'name')
 
 
-#   При открытии выидим все отзывы к фильму
 class ReviewInline(admin.TabularInline):
+    """ With open get all movies reviews """
     model = Reviews
     extra = 1
     readonly_fields = ('name', 'email')
 
 
-#   Прикрепляем кадры из фильма к нашему фильму в админке, TabularInline - горизонтальное отображение,
-#   Stacked- вертикальое + метод для наглядного вывода изображения
 class MovieShotsInline(admin.TabularInline):
+    """ Add movieshots to each movie in admin """
     model = MovieShots
     extra = 1
     readonly_fields = ('get_image',)
@@ -47,30 +49,31 @@ class MovieShotsInline(admin.TabularInline):
     get_image.short_description = 'Изображение'
 
 
-#   "Фильмы" в админке выставляем порядок отображения, фильтр по категориям и годам, и поиск
-#   [оставляем привязку для ReviewInline, чтобы видеть отзывы привязвнные к фильму][оставляем привязку для
-#   MovieShotsInline, чтобы видеть кадры из фильма привязвнные к фильму]
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
+    """
+        Movies
+        In admin make the ordering, filter and serch
+        Bind ReviewInline, [Make a link for ReviewInline to see reviews linked to the movie, same to MovieShotsInline]
+
+    """
     list_display = ('title', 'category', 'url', 'draft')
     list_filter = ('category', 'year')
     search_fields = ('title', 'category__name')
     inlines = [MovieShotsInline, ReviewInline]
-    #   Кнопка сохранения сверху
+    #   Save button on the top
     save_on_top = True
-    #   Добавляем конопку сохранить как новый объект, карточка изменения не закрывается, все данные в полях остаются,
-    #   остается только изменить старые данные на новые и сохранить (делается в случае если новому фильму надо изменить
-    #   только одно значение, а остальные оставить такими же)
+    #   Add button "save as new object", editing-page don't close, all data in fields save,
+    #   at the end, we are should change data
     save_as = True
-    #   Позволяет выбрать поле для редактирования прямо в таблице, без необходимости открывать карточку. в нашем случае
-    #   это draft (черновик)
+    #   Allows you to select a field for editing directly in the table, without having to open the card. in our case
+    #   is - draft
     list_editable = ('draft',)
-    #   ckeditor form
+    #   Ckeditor form
     form = MovieAdminForm
-    #   В поле постера добавили отображение изображения постера, функцией get_image
+    #   In Poster field add poster-image, by func get_image
     readonly_fields = ('get_image',)
-    #   Разбиваем ячейки с полями в более удобный формат отображения (пример: 2 поля в кортеже означают 2
-    #   поля стоящих рядом в карточке). Словарь где ключ и значение это одна строка в шаблоне админки
+    #   We split cells with fields into a more convenient display format
     fieldsets = (
         (None, {
             'fields': (('title', 'tagline'),)
@@ -99,22 +102,22 @@ class MovieAdmin(admin.ModelAdmin):
     get_image.short_description = 'Постер'
 
 
-#   В отзывах ставим порядок таблицы, внутри свойства запрещаем к редактированию 2 поля имя и емаил
 @admin.register(Reviews)
 class ReviewAdmin(admin.ModelAdmin):
+    """ Reviews admin display """
     list_display = ('name', 'email', 'parent', 'movie', 'id')
     readonly_fields = ('name', 'email')
 
 
-#   Добавили имя и урл для отображения в таблицу админки, когда открывает Жанр
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
+    """ Genres admin display """
     list_display = ('name', 'url')
 
 
-#   Добавили имя и возраст для отображения в таблицу админки, когда открывает Актера
 @admin.register(Actor)
 class ActorAdmin(admin.ModelAdmin):
+    """ Actors admin display """
     search_fields = ('name', 'age')
     list_display = ('name', 'age', 'get_image', 'image')
     readonly_fields = ('get_image',)
@@ -124,9 +127,9 @@ class ActorAdmin(admin.ModelAdmin):
     get_image.short_description = 'Изображение'
 
 
-#   Добавили имя и возраст для отображения в таблицу админки, когда открывает Режиссера
 @admin.register(FilmDirector)
 class ActorAdmin(admin.ModelAdmin):
+    """ Film Director admin display """
     search_fields = ('name', 'age')
     list_display = ('name', 'age', 'get_image', 'image')
     readonly_fields = ('get_image',)
@@ -136,15 +139,15 @@ class ActorAdmin(admin.ModelAdmin):
     get_image.short_description = 'Изображение'
 
 
-#   Добавили имя и ip для отображения в таблицу админки, когда открывает Рейтинг
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
+    """ Rating admin display """
     list_display = ('movie', 'star', 'ip')
 
 
-#   Добавили имя и ip для отображения в таблицу админки, когда открывает Кадры фильма
 @admin.register(MovieShots)
 class MovieShotsAdmin(admin.ModelAdmin):
+    """ Movie shots admin display """
     list_display = ('title', 'movie', 'get_image', 'image')
     readonly_fields = ('get_image',)
 

@@ -1,11 +1,10 @@
 from django.db import models
-from django.db import models
 from datetime import date
 from django.urls import reverse
 
 
-#   Категории
 class Category(models.Model):
+    """ Category of movies """
     name = models.CharField('Категория', max_length=150)
     description = models.TextField('Описание')
     url = models.SlugField(max_length=160, unique=True)
@@ -18,8 +17,8 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
 
 
-#   Актеры
 class Actor(models.Model):
+    """ Actors of movies """
     name = models.CharField('Имя', max_length=100)
     age = models.PositiveSmallIntegerField('Возраст', default=0)
     description = models.TextField('Описание')
@@ -38,6 +37,7 @@ class Actor(models.Model):
 
 #   Режиссеры
 class FilmDirector(models.Model):
+    """ Film directors of movies """
     name = models.CharField('Имя', max_length=100)
     age = models.PositiveSmallIntegerField('Возраст', default=0)
     description = models.TextField('Описание')
@@ -54,8 +54,8 @@ class FilmDirector(models.Model):
         verbose_name_plural = 'Режиссеры'
 
 
-#   Жанры
 class Genre(models.Model):
+    """ Genres of movies """
     name = models.CharField('Имя', max_length=100)
     description = models.TextField('Описание')
     url = models.SlugField(max_length=160, unique=True)
@@ -70,6 +70,7 @@ class Genre(models.Model):
 
 #   Фильмы
 class Movie(models.Model):
+    """ Movies """
     title = models.CharField('Название', max_length=100)
     tagline = models.CharField('Слоган', max_length=100, default='')
     description = models.TextField('Описание')
@@ -103,6 +104,7 @@ class Movie(models.Model):
 
 #   Кадры фильмов
 class MovieShots(models.Model):
+    """ Shots scenes of movies """
     title = models.CharField('Заголовок', max_length=100)
     description = models.TextField('Описание')
     image = models.ImageField('Изображение', upload_to='movie_shots/')
@@ -116,8 +118,8 @@ class MovieShots(models.Model):
         verbose_name_plural = 'Кадры из фильма'
 
 
-#   Рейтинг
 class RatingStars(models.Model):
+    """ Stars for view valuing of rating """
     value = models.SmallIntegerField('Значение', default=0)
 
     def __str__(self):
@@ -130,6 +132,7 @@ class RatingStars(models.Model):
 
 
 class Rating(models.Model):
+    """ Add rating for movies """
     ip = models.CharField('IP адрес', max_length=15)
     star = models.ForeignKey(RatingStars, on_delete=models.CASCADE, verbose_name='звезда')
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, verbose_name='фильм')
@@ -142,8 +145,8 @@ class Rating(models.Model):
         verbose_name_plural = 'Рейтинги'
 
 
-#   Отзывы
 class Reviews(models.Model):
+    """ Reviews of movies """
     email = models.EmailField()
     name = models.CharField('Имя', max_length=100)
     text = models.TextField('Сообщение', max_length=5000)
